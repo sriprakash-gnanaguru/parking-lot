@@ -1,4 +1,4 @@
-package com.parking.nl.netherlandsparkingsystem;
+package com.parking.nl;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

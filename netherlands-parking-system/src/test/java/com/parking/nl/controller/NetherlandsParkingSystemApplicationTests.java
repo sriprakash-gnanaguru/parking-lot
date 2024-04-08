@@ -1,4 +1,4 @@
-package com.parking.nl.netherlandsparkingsystem;
+package com.parking.nl.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
