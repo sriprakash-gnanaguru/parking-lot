@@ -13,21 +13,21 @@ import java.time.LocalTime;
 public class ApplyFreeDurationStrategy implements DurationStrategy{
 
     @Override
-   public Duration calculateDuration(LocalDateTime start, LocalDateTime end) {
-        long freeHours = 0;
-        long freeMinutes = 0;
-        LocalDateTime currentDateTime = null;
-        for (currentDateTime = start; currentDateTime.isBefore(end.plusHours(1)); currentDateTime = currentDateTime.plusHours(1)) {
-            DayOfWeek dayOfWeek = currentDateTime.getDayOfWeek();
-            LocalTime currentTime = currentDateTime.toLocalTime();
-            if (dayOfWeek == DayOfWeek.SUNDAY || (currentTime.isAfter(LocalTime.of(21, 0)) || currentTime.compareTo(LocalTime.of(7, 59)) <= 0)) {
-                if (Duration.between(currentDateTime.minusHours(1), end).toMinutes() >= 60) {
-                    freeHours++;
-                } else {
-                    freeMinutes = Duration.between(end, currentDateTime).toMinutes();
+   public long calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
+        DayOfWeek dayOfWeek = startTime.getDayOfWeek();
+        if (dayOfWeek == DayOfWeek.SUNDAY){
+            return Duration.between(startTime, endTime).toMinutes();
+        }else{
+            long freeMinutes = 0;
+            while (startTime.isBefore(endTime)) {
+                if ((startTime.toLocalTime().isBefore(LocalTime.of(7, 59))
+                        || startTime.toLocalTime().isAfter(LocalTime.of(21, 0)))) {
+                    freeMinutes++;
                 }
+                startTime = startTime.plusMinutes(1);
             }
+            return freeMinutes;
         }
-        return Duration.ofHours(freeHours).plusMinutes(freeMinutes);
+
     }
 }

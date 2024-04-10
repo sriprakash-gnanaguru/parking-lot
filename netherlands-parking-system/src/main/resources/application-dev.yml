@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: Netherlands-Parking-System
+
+env:
+  name: Dev
+
+report:
+  location:
+  cron: 0 */5 * * * *
+
+logging:
+  level:
+    com.parking.nl: DEBUG

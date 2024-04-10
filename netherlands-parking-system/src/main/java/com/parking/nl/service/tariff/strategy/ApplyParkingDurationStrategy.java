@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Qualifier("parkingDurationStrategy")
 public class ApplyParkingDurationStrategy implements DurationStrategy{
     @Override
-    public Duration calculateDuration(LocalDateTime start, LocalDateTime end) {
-        return Duration.between(start, end);
+    public long calculateDuration(LocalDateTime start, LocalDateTime end) {
+        return Duration.between(start, end).toMinutes();
     }
 }

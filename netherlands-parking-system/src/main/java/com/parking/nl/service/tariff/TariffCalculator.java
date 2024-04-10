@@ -26,12 +26,12 @@ public class TariffCalculator {
     }
 
     public BigDecimal calculateTariff(String streetName, LocalDateTime startTime, LocalDateTime endTime){
-        Duration payable = parkingStrategy.calculateDuration(startTime,endTime).minus(freeStrategy.calculateDuration(startTime,endTime));
+        long payable = parkingStrategy.calculateDuration(startTime,endTime) - freeStrategy.calculateDuration(startTime,endTime);
         BigDecimal tariff = BigDecimal.valueOf(tariffService.loadTariffMetaData().get(streetName));
         if(tariff == null){
             throw new InvalidInputException("No Tariff is defined for the steeet:"+streetName);
         }
-        BigDecimal costinCents = tariff.multiply(new BigDecimal(payable.toMinutes()));
+        BigDecimal costinCents = tariff.multiply(new BigDecimal(payable));
         return costinCents.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
     }
 

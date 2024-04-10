@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 public interface UnRegisteredVehiclesMapper {
     @Mapping(source = "licensePlateNumber", target = "licensePlateNumber")
     @Mapping(source = "streetName", target = "streetName")
-    @Mapping(target = "isNotified", expression = "java(Boolean.TRUE)")
+    @Mapping(target = "isNotified", expression = "java(Boolean.FALSE)")
     @Mapping(source = "checkInDateTime", target = "observationTime")
     @Mapping(target = "lastUpdatedTime", expression = "java(java.time.LocalDateTime.now())")
     UnRegsiteredVehicles translate(UnregisteredVehiclesRequest request);

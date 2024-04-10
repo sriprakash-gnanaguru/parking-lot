@@ -1,6 +1,5 @@
 package com.parking.nl.validator;
 
-import com.parking.nl.data.model.Street;
 import com.parking.nl.domain.request.UnregisteredVehiclesRequest;
 import com.parking.nl.exception.InvalidInputException;
 import com.parking.nl.service.TariffService;
@@ -28,6 +27,13 @@ public class StreetValidator{
         if (!streetNames.isEmpty()) {
             log.error("Invalid street names: ", streetNames);
             throw new InvalidInputException("Invalid street names: " + String.join(",", streetNames));
+        }
+    }
+    public void validate(String streetName){
+        Map<String, Integer> parkingTariffMetaData = tariffService.loadTariffMetaData();
+        if(!parkingTariffMetaData.containsKey(streetName)){
+            log.error("Street name  is not found in Street:",streetName);
+            throw new InvalidInputException("Street name is not found");
         }
     }
 }

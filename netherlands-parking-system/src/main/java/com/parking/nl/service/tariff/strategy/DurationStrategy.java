@@ -5,5 +5,5 @@ import java.time.LocalDateTime;
 
 public interface DurationStrategy {
 
-    Duration calculateDuration(LocalDateTime start, LocalDateTime end);
+    long calculateDuration(LocalDateTime start, LocalDateTime end);
 }

@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(InvalidInputException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),Status.FAILURE.getStatus(),LocalDateTime.now());
         log.error("Invalid Input exception: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)

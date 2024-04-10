@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ParkingRequest {
 
-    @NotBlank(message = "License plate number should not be empty")
     private String licensePlateNumber;
 
     @NotBlank(message = "Street Name should not be empty")

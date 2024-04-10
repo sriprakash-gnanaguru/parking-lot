@@ -15,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -23,8 +26,7 @@ import java.util.List;
 @RequestMapping(value = "/admin/v1")
 @Slf4j
 public class AdminRegisterController {
-    private final AdminRegisterService adminRegisterService;
-
+   private final AdminRegisterService adminRegisterService;
     @Autowired
     public AdminRegisterController(AdminRegisterService adminRegisterService) {
         this.adminRegisterService = adminRegisterService;
