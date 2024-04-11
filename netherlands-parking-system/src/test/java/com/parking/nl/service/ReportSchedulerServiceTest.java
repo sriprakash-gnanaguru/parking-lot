@@ -3,7 +3,6 @@ package com.parking.nl.service;
 import com.parking.nl.data.model.UnRegsiteredVehicles;
 import com.parking.nl.data.repository.UnRegisteredVehiclesRepository;
 import com.parking.nl.domain.request.UnregisteredVehiclesRequest;
-import com.parking.nl.exception.InvalidInputException;
 import com.parking.nl.mapper.UnRegisteredVehiclesMapper;
 import com.parking.nl.service.impl.ReportSchedulerServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +19,6 @@ import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(SpringExtension.class)
 public class ReportSchedulerServiceTest {

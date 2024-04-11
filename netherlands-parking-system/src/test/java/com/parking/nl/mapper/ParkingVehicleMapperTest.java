@@ -3,7 +3,6 @@ package com.parking.nl.mapper;
 import com.parking.nl.data.model.ParkingStatus;
 import com.parking.nl.data.model.ParkingVehicle;
 import com.parking.nl.domain.request.ParkingRequest;
-import com.parking.nl.service.ParkingSystemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

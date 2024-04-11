@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.parking.nl.common.Constants.ADMIN_CONTROLLER_MSG;
+
 @RestController
 @RequestMapping(value = "/admin/v1")
 @Slf4j
@@ -48,7 +50,7 @@ public class AdminRegisterController {
     public ResponseEntity<OutputResponse> persistUnregisteredVehicles(@RequestBody @Valid List<UnregisteredVehiclesRequest> unregisteredVehicles) {
         adminRegisterService.persistUnregisterVehicles(unregisteredVehicles);
         log.info("Registered the unregistered vehicles in the system for penalty processing");
-        return ResponseEntity.ok().body(OutputResponse.builder().message("Registered the unregistered vehicles in the system for penality processing").status(Status.SUCCESS).build());
+        return ResponseEntity.ok().body(OutputResponse.builder().message(ADMIN_CONTROLLER_MSG).status(Status.SUCCESS).build());
     }
 
 }

@@ -4,7 +4,6 @@ import com.parking.nl.data.model.ParkingVehicle;
 import com.parking.nl.domain.request.UnregisteredVehiclesRequest;
 import com.parking.nl.exception.InvalidInputException;
 import com.parking.nl.service.ParkingSystemService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

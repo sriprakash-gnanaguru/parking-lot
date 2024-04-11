@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import static com.parking.nl.common.Constants.COMMA;
+import static com.parking.nl.common.Constants.REPORTS_HEADER;
 
 @Component
 @Slf4j
@@ -46,8 +47,7 @@ public class ReportScheduler {
             List<String[]> data = new ArrayList<String[]>();
            try{
                CSVWriter csvWriter = new CSVWriter(new FileWriter(csvFilePath), COMMA.charAt(0), CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
-               String[] header = {"License Plate Number", "Observation Date", "Street Name"};
-               data.add(header);
+               data.add(REPORTS_HEADER);
                for (UnRegsiteredVehicles response : unRegsiteredVehicles) {
                    String[] row = {response.getLicensePlateNumber(), CommonUtil.formateDate(response.getObservationTime()),response.getStreetName()};
                    data.add(row);

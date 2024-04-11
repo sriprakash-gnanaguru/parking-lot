@@ -19,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.parking.nl.common.Constants.PARKING_CONTROLLER_MSG;
+
 @RestController
 @RequestMapping(value = "/parking/v1")
 @Slf4j
@@ -46,7 +48,7 @@ public class ParkingSystemController {
     public ResponseEntity<OutputResponse> registerParking(@RequestBody @Valid ParkingRequest registerParkingRequest) {
         parkingService.registerParking(registerParkingRequest);
         log.info("Parking successfully registered for license Plate: {}", registerParkingRequest.getLicensePlateNumber());
-        return ResponseEntity.ok().body(OutputResponse.builder().message(String.format("Parking session started successfully for license plate number: %s", registerParkingRequest.getLicensePlateNumber())).status(Status.SUCCESS).build());
+        return ResponseEntity.ok().body(OutputResponse.builder().message(String.format(PARKING_CONTROLLER_MSG, registerParkingRequest.getLicensePlateNumber())).status(Status.SUCCESS).build());
     }
 
     @Operation(summary = "Stop the parking session of the vehicle", description = "This API is used to stop the active parking session of the vehicle.")

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,12 +14,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "unregistered_vehicles_observation")
-public class UnRegsiteredVehicles {
+@Table(name = "parking_vehicle")
+public class ParkingVehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "observation_id")
-    private Long observationId;
+    @Column(name = "parking_id")
+    private Long parkingId;
 
     /**
      * Licence plate number
@@ -28,10 +29,10 @@ public class UnRegsiteredVehicles {
     private String licensePlateNumber;
 
     /**
-     * Is penalty communicated?
+     * Status of the parking session
      */
-    @Column(name = "is_notified")
-    private boolean isNotified;
+    @Column(name = "status")
+    private String status;
 
     /**
      * Street name for the parking spot
@@ -42,12 +43,24 @@ public class UnRegsiteredVehicles {
     @Column(name = "street_name")
     private String streetName;
 
+
+    /**
+     * Payable amount for the parking
+     */
+    @Column(name = "price")
+    private BigDecimal price;
+
     /**
      * Start time of the parking
      */
-    @Column(name = "observation_time", nullable = false)
-    private LocalDateTime observationTime;
+    @Column(name = "start_time", nullable = false)
+    private LocalDateTime startTime;
 
+    /**
+     * End time of the parking
+     */
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
 
 
     @Column(name = "last_updated_time")

@@ -1,5 +1,6 @@
 package com.parking.nl.domain.request;
 
+import com.parking.nl.validator.NotNullConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ParkingRequest {
 
+    @NotNullConstraint
     private String licensePlateNumber;
 
-    @NotBlank(message = "Street Name should not be empty")
+    @NotNullConstraint
     private String streetName;
 
     @NotNull(message = "Check-in time should not be empty or null")

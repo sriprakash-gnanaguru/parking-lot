@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
 
+import static com.parking.nl.common.Constants.NOT_NULL_VALIDATION_MSG;
+
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -33,11 +35,14 @@ public class GlobalExceptionHandler {
         log.error("Invalid Input exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),Status.FAILURE.getStatus(),LocalDateTime.now());
         log.error("Generic exception: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        if(ex.getMessage()!= null && ex.getMessage().contains(NOT_NULL_VALIDATION_MSG)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 }

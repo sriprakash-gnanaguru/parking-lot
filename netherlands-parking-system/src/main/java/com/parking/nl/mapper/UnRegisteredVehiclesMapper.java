@@ -2,7 +2,6 @@ package com.parking.nl.mapper;
 
 import com.parking.nl.data.model.ParkingVehicle;
 import com.parking.nl.data.model.UnRegsiteredVehicles;
-import com.parking.nl.domain.request.ParkingRequest;
 import com.parking.nl.domain.request.UnregisteredVehiclesRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

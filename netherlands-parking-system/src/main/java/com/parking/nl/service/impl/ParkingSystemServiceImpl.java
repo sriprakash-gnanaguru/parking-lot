@@ -3,7 +3,6 @@ package com.parking.nl.service.impl;
 import com.parking.nl.data.model.ParkingStatus;
 import com.parking.nl.data.model.ParkingVehicle;
 import com.parking.nl.data.repository.ParkingVehiclesRepository;
-import com.parking.nl.data.repository.ParkingVehiclesSpecification;
 import com.parking.nl.data.repository.StreetRepository;
 import com.parking.nl.domain.request.ParkingRequest;
 import com.parking.nl.domain.response.OutputResponse;
@@ -26,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.parking.nl.common.Constants.PARKING_SERVICE_MSG;
 import static com.parking.nl.data.repository.ParkingVehiclesSpecification.findVehicleByLicensePlateNumber;
 import static com.parking.nl.data.repository.ParkingVehiclesSpecification.findVehicleByStatus;
 
@@ -52,7 +52,6 @@ public class ParkingSystemServiceImpl implements ParkingSystemService {
     @Transactional
     @Override
     public void registerParking(ParkingRequest registerParkingRequest) {
-        licenseValidator.validate(registerParkingRequest.getLicensePlateNumber());
         StreetValidator.validate(registerParkingRequest.getStreetName());
         Specification<ParkingVehicle> spec = Specification.where(findVehicleByLicensePlateNumber(registerParkingRequest.getLicensePlateNumber())).and(findVehicleByStatus(ParkingStatus.START.getParkingStatus()));
         if(!parkingRepository.findAll(spec).isEmpty()){
@@ -66,7 +65,6 @@ public class ParkingSystemServiceImpl implements ParkingSystemService {
     @Override
     public OutputResponse unregisterParking(String licensePlateNumber){
         BigDecimal parkingFee;
-        licenseValidator.validate(licensePlateNumber);
         Specification<ParkingVehicle> spec = Specification.where(findVehicleByLicensePlateNumber(licensePlateNumber)).and(findVehicleByStatus(ParkingStatus.START.getParkingStatus()));
         if(parkingRepository.findAll(spec).isEmpty()){
             log.error("Vehicle has no active session in the parking");
@@ -81,7 +79,7 @@ public class ParkingSystemServiceImpl implements ParkingSystemService {
             parkingVehicle.setEndTime(endTime);
             parkingRepository.save(parkingVehicle);
         }
-        return OutputResponse.builder().message("Active session of parking vehicle had ended succesfully").status(Status.SUCCESS).parkingFee(parkingFee.toPlainString()).build();
+        return OutputResponse.builder().message(PARKING_SERVICE_MSG).status(Status.SUCCESS).parkingFee(parkingFee.toPlainString()).build();
     }
 
     @Override
