@@ -20,6 +20,8 @@
 		<spring-doc.version>2.0.2</spring-doc.version>
 		<lombok.version>1.18.30</lombok.version>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
+		<swagger.version>2.2.0</swagger.version>
+		<common.io.version>2.6</common.io.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -65,18 +67,22 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.2.0</version>
+			<version>${swagger.version}</version>
 		</dependency>
 		<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-validation</artifactId>
-	</dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${common.io.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

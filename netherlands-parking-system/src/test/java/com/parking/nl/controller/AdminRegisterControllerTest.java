@@ -2,6 +2,7 @@ package com.parking.nl.controller;
 
 import com.parking.nl.exception.InvalidInputException;
 import com.parking.nl.service.AdminRegisterService;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 
 @WebMvcTest(AdminRegisterController.class)
-public class AdminSystemControllerTest {
+public class AdminRegisterControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -29,9 +34,7 @@ public class AdminSystemControllerTest {
         doNothing().when(service).persistUnregisterVehicles(any());
         mockMvc.perform(MockMvcRequestBuilders.post("/admin/v1/vehicles/penalty")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("[{\"licensePlateNumber\":\"NL-69-YT\",\"streetName\":\"Azure\",\"checkInDateTime\":\"2024-04-05T07:34:55\"}," +
-                                "{\"licensePlateNumber\":\"NL-07-EH\",\"streetName\":\"Oracle\",\"checkInDateTime\":\"2024-04-05T06:24:45\"}," +
-                                "{\"licensePlateNumber\":\"NL-89-ZA\",\"streetName\":\"Java\",\"checkInDateTime\":\"2024-03-05T06:12:08\"}]"))
+                        .content(getInputString()))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
 
@@ -41,8 +44,18 @@ public class AdminSystemControllerTest {
         doThrow(new RuntimeException()).when(service).persistUnregisterVehicles(any());
         mockMvc.perform(MockMvcRequestBuilders.post("/admin/v1/vehicles/penalty")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("[{\"licensePlateNumber\":\"NL-69-YT\",\"streetName\":\"Torreslaan\",\"checkInDateTime\":\"2024-04-05T07:34:55\"}]"))
+                        .content(getInputString()))
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError());
+    }
+
+    private String getInputString() {
+        String request;
+        try {
+            request = FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("Input_Request.json").getFile()), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return request;
     }
 
 }

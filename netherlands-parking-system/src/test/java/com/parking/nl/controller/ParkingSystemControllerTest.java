@@ -1,8 +1,11 @@
 package com.parking.nl.controller;
 
+import com.parking.nl.data.model.ParkingStatus;
+import com.parking.nl.data.model.ParkingVehicle;
 import com.parking.nl.domain.request.ParkingRequest;
 import com.parking.nl.exception.InvalidInputException;
 import com.parking.nl.service.ParkingSystemService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.LocalDateTime;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -24,6 +29,14 @@ public class ParkingSystemControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private ParkingSystemService service;
+    private String ProperRequest;
+    private String InCorrectRequest;
+
+    @BeforeEach
+    public void setUp() {
+        ProperRequest = "{\"licensePlateNumber\":\"NL-69-YT\",\"streetName\":\"Azure\",\"checkInDateTime\":\"2024-04-05T07:34:55\"}";
+        InCorrectRequest = "{ \"licensePlateNumber\": \"\", \"streetName\": \"Java\", \"checkInDateTime\": \"2024-04-05T07:34:55\"}";
+    }
 
     @Test
     @DisplayName("Success/Happy flow scenario")
@@ -31,7 +44,7 @@ public class ParkingSystemControllerTest {
         doNothing().when(service).registerParking(any(ParkingRequest.class));
         mockMvc.perform(MockMvcRequestBuilders.post("/parking/v1/vehicles/start")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"licensePlateNumber\":\"NL-69-YT\",\"streetName\":\"Azure\",\"checkInDateTime\":\"2024-04-05T07:34:55\"}"))
+                        .content(ProperRequest))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
 
@@ -51,7 +64,7 @@ public class ParkingSystemControllerTest {
         doThrow(new InvalidInputException("License plate number is empty")).when(service).registerParking(any(ParkingRequest.class));
         mockMvc.perform(MockMvcRequestBuilders.post("/parking/v1/vehicles/start")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"licensePlateNumber\": \"\", \"streetName\": \"Java\", \"checkInDateTime\": \"2024-04-05T07:34:55\"}") )
+                        .content(InCorrectRequest) )
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
 
