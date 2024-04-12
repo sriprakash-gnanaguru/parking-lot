@@ -46,7 +46,7 @@ public class AdminRegisterController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)) })
     })
-    @PostMapping(value = "/vehicles/penalty", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/vehicles/penalty")
     public ResponseEntity<OutputResponse> persistUnregisteredVehicles(@RequestBody @Valid List<UnregisteredVehiclesRequest> unregisteredVehicles) {
         adminRegisterService.persistUnregisterVehicles(unregisteredVehicles);
         log.info("Registered the unregistered vehicles in the system for penalty processing");

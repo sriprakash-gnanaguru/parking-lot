@@ -8,6 +8,8 @@ import com.parking.nl.service.ParkingSystemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,18 +31,11 @@ public class ParkingSystemControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private ParkingSystemService service;
-    private String ProperRequest;
-    private String InCorrectRequest;
 
-    @BeforeEach
-    public void setUp() {
-        ProperRequest = "{\"licensePlateNumber\":\"NL-69-YT\",\"streetName\":\"Azure\",\"checkInDateTime\":\"2024-04-05T07:34:55\"}";
-        InCorrectRequest = "{ \"licensePlateNumber\": \"\", \"streetName\": \"Java\", \"checkInDateTime\": \"2024-04-05T07:34:55\"}";
-    }
 
-    @Test
-    @DisplayName("Success/Happy flow scenario")
-    public void whenPostWithValidRequest_thenCorrectResponse() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = "{\"licensePlateNumber\":\"NL-69-YT\",\"streetName\":\"Azure\",\"checkInDateTime\":\"2024-04-05T07:34:55\"}")
+    public void whenPostWithValidRequest_thenCorrectResponse(String ProperRequest) throws Exception {
         doNothing().when(service).registerParking(any(ParkingRequest.class));
         mockMvc.perform(MockMvcRequestBuilders.post("/parking/v1/vehicles/start")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -58,13 +53,14 @@ public class ParkingSystemControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError());
     }
 
-    @Test
+    @ParameterizedTest
     @DisplayName("Bad Request scenario")
-    public void whenPostWithBadRequest_thenInCorrectResponse() throws Exception {
+    @ValueSource(strings = "{ \"licensePlateNumber\": \"\", \"streetName\": \"Java\", \"checkInDateTime\": \"2024-04-05T07:34:55\"}")
+    public void whenPostWithBadRequest_thenInCorrectResponse(String inCorrectRequest) throws Exception {
         doThrow(new InvalidInputException("License plate number is empty")).when(service).registerParking(any(ParkingRequest.class));
         mockMvc.perform(MockMvcRequestBuilders.post("/parking/v1/vehicles/start")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(InCorrectRequest) )
+                        .content(inCorrectRequest) )
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
 
