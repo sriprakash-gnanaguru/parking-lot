@@ -1,7 +1,7 @@
 package com.parking.nl.controller;
 
 import com.parking.nl.domain.request.ParkingRequest;
-import com.parking.nl.domain.response.OutputResponse;
+import com.parking.nl.domain.response.ParkingMonitoringResponse;
 import com.parking.nl.domain.response.Status;
 import com.parking.nl.exception.ErrorResponse;
 import com.parking.nl.service.ParkingSystemService;
@@ -36,7 +36,7 @@ public class ParkingSystemController {
     @ApiResponses(value= {
             @ApiResponse(responseCode = "200", description="Success. Parking session has begun",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = OutputResponse.class)) }),
+                            schema = @Schema(implementation = ParkingMonitoringResponse.class)) }),
             @ApiResponse(responseCode = "400", description="Bad Request. Invalid input provided",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)) }),
@@ -45,17 +45,17 @@ public class ParkingSystemController {
                             schema = @Schema(implementation = ErrorResponse.class)) })
     })
     @PostMapping(value = "/vehicles/start", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OutputResponse> registerParking(@RequestBody @Valid ParkingRequest registerParkingRequest) {
+    public ResponseEntity<ParkingMonitoringResponse> registerParking(@RequestBody @Valid ParkingRequest registerParkingRequest) {
         parkingService.registerParking(registerParkingRequest);
         log.info("Parking successfully registered for license Plate: {}", registerParkingRequest.getLicensePlateNumber());
-        return ResponseEntity.ok().body(OutputResponse.builder().message(String.format(PARKING_CONTROLLER_MSG, registerParkingRequest.getLicensePlateNumber())).status(Status.SUCCESS).build());
+        return ResponseEntity.ok().body(ParkingMonitoringResponse.builder().message(String.format(PARKING_CONTROLLER_MSG, registerParkingRequest.getLicensePlateNumber())).status(Status.SUCCESS).build());
     }
 
     @Operation(summary = "Stop the parking session of the vehicle", description = "This API is used to stop the active parking session of the vehicle.")
     @ApiResponses(value= {
             @ApiResponse(responseCode = "200", description="Success. Parking session has ended",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = OutputResponse.class)) }),
+                            schema = @Schema(implementation = ParkingMonitoringResponse.class)) }),
             @ApiResponse(responseCode = "400", description="Bad Request. Invalid input provided",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)) }),
@@ -64,9 +64,9 @@ public class ParkingSystemController {
                             schema = @Schema(implementation = ErrorResponse.class)) })
     })
     @PutMapping(value = "/vehicles/{vehicleNumber}/stop", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OutputResponse> unregisterParking(@Parameter(description = "Vehicle number", required = true)
+    public ResponseEntity<ParkingMonitoringResponse> unregisterParking(@Parameter(description = "Vehicle number", required = true)
                                                                 @NotBlank @PathVariable(value = "vehicleNumber") String vehicleNumber) {
-        OutputResponse response = parkingService.unregisterParking(vehicleNumber);
+        ParkingMonitoringResponse response = parkingService.unregisterParking(vehicleNumber);
         log.info("Parking of the vehicle successfully ended for license Plate: {}", vehicleNumber);
         return ResponseEntity.ok().body(response);
     }

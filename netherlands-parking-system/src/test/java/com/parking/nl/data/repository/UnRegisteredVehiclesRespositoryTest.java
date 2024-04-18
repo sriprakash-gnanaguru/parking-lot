@@ -37,7 +37,7 @@ public class UnRegisteredVehiclesRespositoryTest {
     public void testFindByisNotified(){
         List<UnRegsiteredVehicles> vehicles = repository.findByisNotified(Boolean.FALSE);
         Assertions.assertThat(vehicles).isNotEmpty();
-        Assertions.assertThat(vehicles.get(0).getLicensePlateNumber().equals(this.vehicle.getLicensePlateNumber()));
+        Assertions.assertThat(vehicles).contains(this.vehicle);
     }
 
     @Test

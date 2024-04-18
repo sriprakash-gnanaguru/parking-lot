@@ -33,7 +33,6 @@ public class ApplyFreeDurationStrategyTest {
     @Test
     @DisplayName("All possible scenario in one testcase with various combination of dates")
     public void testcalculateDuration(){
-        Assertions.assertNotNull(strategy.calculateDuration(afterTwentyOne, afterTwentyOne.plusMinutes(5)));
         Assertions.assertEquals(5,strategy.calculateDuration(afterTwentyOne, afterTwentyOne.plusMinutes(5)));
         Assertions.assertEquals(120,strategy.calculateDuration(sunday, sunday.plusHours(2)));
         Assertions.assertEquals(45,strategy.calculateDuration(BeforeEight, BeforeEight.plusMinutes(45)));

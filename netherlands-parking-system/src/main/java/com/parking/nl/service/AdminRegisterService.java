@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface AdminRegisterService {
 
-    void persistUnregisterVehicles(List<UnregisteredVehiclesRequest> unregisteredVehicles);
+    List<String> persistUnregisterVehicles(List<UnregisteredVehiclesRequest> unregisteredVehicles);
 }

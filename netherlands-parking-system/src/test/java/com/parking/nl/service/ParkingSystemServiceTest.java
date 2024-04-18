@@ -4,10 +4,11 @@ import com.parking.nl.data.model.ParkingStatus;
 import com.parking.nl.data.model.ParkingVehicle;
 import com.parking.nl.data.repository.ParkingVehiclesRepository;
 import com.parking.nl.domain.request.ParkingRequest;
-import com.parking.nl.domain.response.OutputResponse;
+import com.parking.nl.domain.response.ParkingMonitoringResponse;
 import com.parking.nl.exception.InvalidInputException;
 import com.parking.nl.service.impl.ParkingSystemServiceImpl;
 import com.parking.nl.service.tariff.TariffCalculator;
+import com.parking.nl.validator.CheckInDateValidator;
 import com.parking.nl.validator.LicensePlateValidator;
 import com.parking.nl.validator.StreetValidator;
 import org.junit.jupiter.api.Assertions;
@@ -43,6 +44,8 @@ public class ParkingSystemServiceTest {
     private  StreetValidator StreetValidator;
     @Mock
     private  LicensePlateValidator licensePlateValidator;
+    @Mock
+    private CheckInDateValidator checkInDateValidator;
     @InjectMocks
     private ParkingSystemServiceImpl service;
 
@@ -75,12 +78,13 @@ public class ParkingSystemServiceTest {
         String licensePlatNumber = "NL-HJ-987";
         ParkingVehicle vehicle = ParkingVehicle.builder().licensePlateNumber(licensePlatNumber).streetName("Java").startTime(LocalDateTime.now()).build();
         doNothing().when(licensePlateValidator).validate(any());
+        doNothing().when(checkInDateValidator).validate(LocalDateTime.now());
         Specification<ParkingVehicle> spec = Specification.where(findVehicleByLicensePlateNumber(any())).and(findVehicleByStatus(ParkingStatus.START.getParkingStatus()));
         Mockito.when(parkingRepository.findAll(spec)).thenReturn(Collections.singletonList(vehicle));
         Mockito.when(tariffCalculator.calculateTariff(any(),any(),any())).thenReturn(BigDecimal.ONE);
-        OutputResponse response = service.unregisterParking(licensePlatNumber);
+        ParkingMonitoringResponse response = service.unregisterParking(licensePlatNumber);
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(response.getParkingFee(),"1");
+        Assertions.assertEquals(response.getParkingFee(),BigDecimal.ONE);
     }
 
     @Test

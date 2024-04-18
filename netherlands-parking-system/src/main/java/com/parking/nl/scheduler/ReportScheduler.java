@@ -14,7 +14,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.parking.nl.common.Constants.COMMA;
 import static com.parking.nl.common.Constants.REPORTS_HEADER;
 
@@ -34,8 +37,9 @@ public class ReportScheduler {
     public void perform() {
         log.info("Scheduled task run started successfully.");
         List<UnRegsiteredVehicles> unRegsiteredVehicles = service.findByIsNotified(Boolean.FALSE);
-        generateReport(unRegsiteredVehicles);
-        service.save(unRegsiteredVehicles);
+        List<UnRegsiteredVehicles> sortedList = unRegsiteredVehicles.stream().sorted(Comparator.comparing(UnRegsiteredVehicles::getObservationTime).reversed()).collect(Collectors.toList());
+        generateReport(sortedList);
+        service.save(sortedList);
         log.info("Scheduled task completed successfully.");
     }
     private void generateReport(List<UnRegsiteredVehicles> unRegsiteredVehicles){

@@ -7,6 +7,8 @@ import com.parking.nl.exception.InvalidInputException;
 import com.parking.nl.helper.PenaltyHelper;
 import com.parking.nl.mapper.UnRegisteredVehiclesMapper;
 import com.parking.nl.service.impl.AdminRegisterServiceImpl;
+import com.parking.nl.service.tariff.TariffCalculator;
+import com.parking.nl.validator.CheckInDateValidator;
 import com.parking.nl.validator.StreetValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -32,16 +34,23 @@ public class AdminRegisterServiceTest {
    private UnRegisteredVehiclesMapper mapper;
    @Mock
    private StreetValidator streetValidator;
+    @Mock
+    private CheckInDateValidator checkInDateValidator;
    @Mock
    private PenaltyHelper helper;
    @InjectMocks
     private AdminRegisterServiceImpl service;
-
+    @Mock
+    private TariffCalculator tariffCalculator;
+    @Mock
+    private TariffService tariffService;
     @Test
     @DisplayName("Positive Scenario to test the save operation of Unregisterised vehicles in the street")
     public void testPersistUnregisterVehicles(){
         UnregisteredVehiclesRequest request = UnregisteredVehiclesRequest.builder().licensePlateNumber("NL-MU-098").checkInDateTime(LocalDateTime.now()).streetName("Azure").build();
+        Mockito.when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java", 1));
         doNothing().when(streetValidator).validate(Collections.singletonList(request));
+        doNothing().when(checkInDateValidator).validate(Collections.singletonList(request));
         Mockito.when(helper.getPenaltyVehicles(Collections.singletonList(request))).thenReturn(Collections.singletonList(request));
         Mockito.when(mapper.translate(any())).thenReturn(any(UnRegsiteredVehicles.class));
         service.persistUnregisterVehicles(Collections.singletonList(request));

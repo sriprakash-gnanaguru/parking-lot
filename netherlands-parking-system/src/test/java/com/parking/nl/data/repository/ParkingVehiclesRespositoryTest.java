@@ -38,7 +38,7 @@ public class ParkingVehiclesRespositoryTest {
     public void testFindByLicensePlateNumberAndStatus(){
         Optional<ParkingVehicle>  vehicle = repository.findByLicensePlateNumberAndStatus("NL-TY-876",ParkingStatus.START.getParkingStatus());
         Assertions.assertThat(vehicle).isPresent();
-        Assertions.assertThat(vehicle.get().getLicensePlateNumber().equals(this.vehicle.getLicensePlateNumber()));
+        Assertions.assertThat(vehicle).contains(this.vehicle);
     }
 
     @Test

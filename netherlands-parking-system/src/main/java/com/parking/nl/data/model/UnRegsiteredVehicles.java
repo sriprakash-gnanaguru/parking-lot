@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -47,6 +48,12 @@ public class UnRegsiteredVehicles {
      */
     @Column(name = "observation_time", nullable = false)
     private LocalDateTime observationTime;
+
+    /**
+     * Payable amount for the parking
+     */
+    @Column(name = "price")
+    private BigDecimal price;
 
 
 

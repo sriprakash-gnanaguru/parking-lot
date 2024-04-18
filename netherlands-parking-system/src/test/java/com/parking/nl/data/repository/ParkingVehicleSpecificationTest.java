@@ -35,7 +35,7 @@ public class ParkingVehicleSpecificationTest {
                 .and(ParkingVehiclesSpecification.findVehicleByStatus(ParkingStatus.START.getParkingStatus()));
         List<ParkingVehicle> results = repository.findAll(spec);
         Assertions.assertThat(results).isNotEmpty();
-        Assertions.assertThat(results.get(0).getLicensePlateNumber().equals(vehicle.getLicensePlateNumber()));
+        Assertions.assertThat(results).contains(this.vehicle);
     }
 
     @Test

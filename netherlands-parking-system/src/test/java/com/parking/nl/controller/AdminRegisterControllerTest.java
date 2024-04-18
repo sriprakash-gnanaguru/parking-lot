@@ -18,9 +18,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.json.JsonObject;
 
+import java.util.Collections;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 
 @SpringJUnitWebConfig
 @ContextConfiguration
@@ -37,9 +38,9 @@ public class AdminRegisterControllerTest {
     @ParameterizedTest
     @JsonFileSource(resources = {"/json/Admin_Input_Request.json"})
     public void whenPostWithValidRequest_thenCorrectResponse(final JsonObject request) throws Exception {
-        doNothing().when(service).persistUnregisterVehicles(any());
+        doReturn(Collections.singletonList("NL-UY-567:56")).when(service).persistUnregisterVehicles(any());
         String requestString = request.getJsonArray("InputRequestData").toString();
-        final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/admin/v1/vehicles/penalty")
+        final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/admin/v1/vehicles/monitor")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestString));
         resultActions.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());

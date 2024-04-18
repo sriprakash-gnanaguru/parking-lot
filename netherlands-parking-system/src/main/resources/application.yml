@@ -3,7 +3,7 @@ server:
 
 report:
   location: C:\\Temp\\reports
-  cron: 0 */5 * * * *
+  cron: 0 */1 * * * *
 
 env:
   name: Local

@@ -5,17 +5,19 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OutputResponse {
+public class ParkingMonitoringResponse {
 
     private String message;
 
     private Status status;
 
-    private String parkingFee;
+    private BigDecimal parkingFee;
 
 
 }

@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.2.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.parking.nl</groupId>
 	<artifactId>netherlands-parking-system</artifactId>
@@ -22,6 +22,8 @@
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 		<swagger.version>2.2.0</swagger.version>
 		<common.io.version>2.6</common.io.version>
+		<junit-json-params.version>5.9.1-r0</junit-json-params.version>
+		<org.glassfish.version>1.0.4</org.glassfish.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,12 +88,12 @@
 		<dependency>
 			<groupId>net.joshka</groupId>
 			<artifactId>junit-json-params</artifactId>
-			<version>5.9.1-r0</version>
+			<version>${junit-json-params.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.json</artifactId>
-			<version>1.0.4</version>
+			<version>${org.glassfish.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

@@ -17,7 +17,6 @@ public class ApplyParkingDurationStrategyTest {
     public void testcalculateDuration(){
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusMinutes(5);
-        Assertions.assertNotNull(strategy.calculateDuration(start, end));
         Assertions.assertEquals(5,strategy.calculateDuration(start, end));
     }
 }
