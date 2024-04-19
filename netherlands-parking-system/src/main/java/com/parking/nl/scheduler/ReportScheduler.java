@@ -11,15 +11,18 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
-import static com.parking.nl.common.Constants.COMMA;
-import static com.parking.nl.common.Constants.REPORTS_HEADER;
+import static com.parking.nl.common.Constants.*;
 
 @Component
 @Slf4j
@@ -33,7 +36,7 @@ public class ReportScheduler {
         this.schedulerConfig = schedulerConfig;
     }
 
-    @Scheduled(cron = "${report.cron}")
+    @Scheduled(cron = "0 */5 * ? * *")
     public void perform() {
         log.info("Scheduled task run started successfully.");
         List<UnRegsiteredVehicles> unRegsiteredVehicles = service.findByIsNotified(Boolean.FALSE);
@@ -50,10 +53,10 @@ public class ReportScheduler {
             String csvFilePath = schedulerConfig.getReportLocation() + "/unregistered_vehicles_report_" + currentDateTime + ".csv";
             List<String[]> data = new ArrayList<String[]>();
            try{
-               CSVWriter csvWriter = new CSVWriter(new FileWriter(csvFilePath), COMMA.charAt(0), CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
+               CSVWriter csvWriter = new CSVWriter(new FileWriter(csvFilePath), PIPE.charAt(0), CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
                data.add(REPORTS_HEADER);
                for (UnRegsiteredVehicles response : unRegsiteredVehicles) {
-                   String[] row = {response.getLicensePlateNumber(), CommonUtil.formateDate(response.getObservationTime()),response.getStreetName()};
+                   String[] row = {response.getLicensePlateNumber(), CommonUtil.formateDate(response.getObservationTime()),response.getStreetName(), EURO+dutchNumberFormat(response.getPrice())};
                    data.add(row);
                }
                csvWriter.writeAll(data);
@@ -62,6 +65,18 @@ public class ReportScheduler {
            }catch (IOException e){
                log.error("Error occurred while generating report", e);
            }
+        }
+    }
+
+    private String dutchNumberFormat(BigDecimal amount) {
+        String lang = "nl";
+        String country = "NL";
+        Locale locale = new Locale(lang,country);
+        if (amount == null) {
+            return null;
+        } else {
+            NumberFormat currencyFormatter = DecimalFormat.getNumberInstance(locale);
+            return currencyFormatter.format(amount);
         }
     }
 }

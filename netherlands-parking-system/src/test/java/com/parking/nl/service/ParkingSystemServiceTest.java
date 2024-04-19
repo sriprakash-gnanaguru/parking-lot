@@ -6,6 +6,7 @@ import com.parking.nl.data.repository.ParkingVehiclesRepository;
 import com.parking.nl.domain.request.ParkingRequest;
 import com.parking.nl.domain.response.ParkingMonitoringResponse;
 import com.parking.nl.exception.InvalidInputException;
+import com.parking.nl.exception.ServiceException;
 import com.parking.nl.service.impl.ParkingSystemServiceImpl;
 import com.parking.nl.service.tariff.TariffCalculator;
 import com.parking.nl.validator.CheckInDateValidator;
@@ -55,7 +56,7 @@ public class ParkingSystemServiceTest {
         ParkingRequest request = ParkingRequest.builder().licensePlateNumber("NL-HJ-987").checkInDateTime(LocalDateTime.now()).streetName("Java").build();
         Mockito.when(parkingRepository.findByLicensePlateNumberAndStatus(request.getLicensePlateNumber(), ParkingStatus.START.getParkingStatus()))
                 .thenReturn(Optional.empty());
-        Mockito.when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Torreslaan", 1));
+        Mockito.when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Torreslaan",  BigDecimal.ONE));
         service.registerParking(request);
         Mockito.verify(parkingRepository, Mockito.times(1)).save(Mockito.any());
     }
@@ -67,7 +68,7 @@ public class ParkingSystemServiceTest {
         ParkingVehicle parkingVehicle =  ParkingVehicle.builder().licensePlateNumber("NL-HJ-987").status(ParkingStatus.START.getParkingStatus()).build();
         Specification<ParkingVehicle> spec = Specification.where(findVehicleByLicensePlateNumber(request.getLicensePlateNumber())).and(findVehicleByStatus(ParkingStatus.START.getParkingStatus()));
         Mockito.when(parkingRepository.findAll(spec)).thenReturn(Collections.singletonList(parkingVehicle));
-        Mockito.when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java", 1));
+        Mockito.when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java",  BigDecimal.ONE));
         doThrow(new InvalidInputException("Street is not found")).when(StreetValidator).validate(request.getStreetName());
         Assertions.assertThrows(InvalidInputException.class,()->service.registerParking(request));
     }
@@ -91,8 +92,8 @@ public class ParkingSystemServiceTest {
     @DisplayName("Negative scenario to unregister the vehicle with exception for Invalid input")
     public void testUnRegisterParkingWithInvalidInput() {
         String licensePlateNumber = null;
-        doThrow(new InvalidInputException("No license plate number")).when(licensePlateValidator).validate(any());
-        Assertions.assertThrows(InvalidInputException.class,()->service.unregisterParking(licensePlateNumber));
+        doThrow(new ServiceException("No license plate number")).when(licensePlateValidator).validate(any());
+        Assertions.assertThrows(ServiceException.class,()->service.unregisterParking(licensePlateNumber));
     }
 
 }

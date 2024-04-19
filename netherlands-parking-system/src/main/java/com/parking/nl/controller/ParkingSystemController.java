@@ -3,6 +3,7 @@ package com.parking.nl.controller;
 import com.parking.nl.domain.request.ParkingRequest;
 import com.parking.nl.domain.response.ParkingMonitoringResponse;
 import com.parking.nl.domain.response.Status;
+import com.parking.nl.exception.BusinessException;
 import com.parking.nl.exception.ErrorResponse;
 import com.parking.nl.service.ParkingSystemService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -67,6 +68,9 @@ public class ParkingSystemController {
     public ResponseEntity<ParkingMonitoringResponse> unregisterParking(@Parameter(description = "Vehicle number", required = true)
                                                                 @NotBlank @PathVariable(value = "vehicleNumber") String vehicleNumber) {
         ParkingMonitoringResponse response = parkingService.unregisterParking(vehicleNumber);
+        if(response.getParkingFee() == null){
+            throw new BusinessException("Error in processing the penalty for the vehicle: "+vehicleNumber);
+        }
         log.info("Parking of the vehicle successfully ended for license Plate: {}", vehicleNumber);
         return ResponseEntity.ok().body(response);
     }

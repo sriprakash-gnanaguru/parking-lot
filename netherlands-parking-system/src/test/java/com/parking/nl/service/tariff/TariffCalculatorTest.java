@@ -39,7 +39,7 @@ public class TariffCalculatorTest {
     public void testcalculateTariff(){
         Mockito.when(freeStrategy.calculateDuration(any(),any())).thenReturn(30L);
         Mockito.when(parkingStrategy.calculateDuration(any(),any())).thenReturn(150L);
-        Mockito.when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java",10));
+        Mockito.when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java",BigDecimal.TEN));
         Assertions.assertEquals(new BigDecimal("12.00"),calculator.calculateTariff("Java",any(),any()));
     }
 

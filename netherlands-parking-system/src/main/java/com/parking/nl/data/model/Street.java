@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Street {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "street_id")
     private Long streetId;
 
@@ -22,7 +24,7 @@ public class Street {
     private String name;
 
     @Column(name = "price_per_min")
-    private int pricePerMinute;
+    private BigDecimal pricePerMinute;
 
 
 }

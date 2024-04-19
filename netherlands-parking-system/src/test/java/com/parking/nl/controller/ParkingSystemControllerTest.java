@@ -3,6 +3,7 @@ package com.parking.nl.controller;
 import com.parking.nl.data.model.ParkingStatus;
 import com.parking.nl.data.model.ParkingVehicle;
 import com.parking.nl.domain.request.ParkingRequest;
+import com.parking.nl.domain.response.ParkingMonitoringResponse;
 import com.parking.nl.exception.InvalidInputException;
 import com.parking.nl.service.ParkingSystemService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,11 +20,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 
 @WebMvcTest(ParkingSystemController.class)
 public class ParkingSystemControllerTest {
@@ -67,7 +68,7 @@ public class ParkingSystemControllerTest {
     @Test
     @DisplayName("Success/Happy flow scenario")
     public void whenPutWithValidRequest_thenCorrectResponse() throws Exception {
-        doNothing().when(service).registerParking(any(ParkingRequest.class));
+        doReturn(ParkingMonitoringResponse.builder().parkingFee(BigDecimal.TEN).message("Success").build()).when(service).unregisterParking("NL-69-YT");
         mockMvc.perform(MockMvcRequestBuilders.put("/parking/v1/vehicles/NL-69-YT/stop")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());

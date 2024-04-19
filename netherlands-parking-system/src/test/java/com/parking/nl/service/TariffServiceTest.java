@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
 
@@ -26,10 +27,10 @@ public class TariffServiceTest {
     @Test
     @DisplayName("Positive Scenario to retrieve the data from Street ")
     public void testLoadTariffMetaData() {
-        when(streetRepository.findAll()).thenReturn(Collections.singletonList(Street.builder().streetId(1L).name("Java").pricePerMinute(10).build()));
-        Map<String, Integer> data = service.loadTariffMetaData();
+        when(streetRepository.findAll()).thenReturn(Collections.singletonList(Street.builder().streetId(1L).name("Java").pricePerMinute(BigDecimal.TEN).build()));
+        Map<String, BigDecimal> data = service.loadTariffMetaData();
         Assertions.assertNotNull(data);
-        Assertions.assertEquals(data.get("Java"),10);
+        Assertions.assertEquals(data.get("Java"),BigDecimal.TEN);
     }
 }
 

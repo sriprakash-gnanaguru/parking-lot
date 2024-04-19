@@ -1,6 +1,7 @@
 package com.parking.nl.service.tariff;
 
 import com.parking.nl.exception.InvalidInputException;
+import com.parking.nl.exception.ServiceException;
 import com.parking.nl.service.TariffService;
 import com.parking.nl.service.tariff.strategy.DurationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,9 @@ public class TariffCalculator {
 
     public BigDecimal calculateTariff(String streetName, LocalDateTime startTime, LocalDateTime endTime){
         long payable = parkingStrategy.calculateDuration(startTime,endTime) - freeStrategy.calculateDuration(startTime,endTime);
-        BigDecimal tariff = BigDecimal.valueOf(tariffService.loadTariffMetaData().get(streetName));
+        BigDecimal tariff =tariffService.loadTariffMetaData().get(streetName);
         if(tariff == null){
-            throw new InvalidInputException("No Tariff is defined for the steeet:"+streetName);
+            throw new ServiceException("No Tariff is defined for the steeet:"+streetName);
         }
         BigDecimal costinCents = tariff.multiply(new BigDecimal(payable));
         return costinCents.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);

@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 
 import static org.mockito.Mockito.*;
@@ -25,7 +26,7 @@ public class StreetValidatorTest {
     @Test
     @DisplayName("Validate the street name in the system")
     public void testValidate(){
-        when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java" ,1));
+        when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java" , BigDecimal.ONE));
         streetValidator.validate("Java");
         verify(tariffService, times(1)).loadTariffMetaData();
     }
@@ -40,7 +41,7 @@ public class StreetValidatorTest {
     @Test
     @DisplayName("Validate the street name in the system")
     public void testValidateWithParam(){
-        when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java" ,1));
+        when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java" ,BigDecimal.ONE));
         streetValidator.validate(Collections.singletonList(UnregisteredVehiclesRequest.builder().streetName("Java").build()));
         verify(tariffService, times(1)).loadTariffMetaData();
     }

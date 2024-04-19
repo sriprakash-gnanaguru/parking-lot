@@ -1,0 +1,16 @@
+{
+  "InputRequestData":  [
+    {
+      "price": 10.50,
+      "streetName": "PostgreSQL"
+    },
+    {
+      "price": 14.5,
+      "streetName": "Oracle"
+    },
+    {
+      "price": 12.75,
+      "streetName": "DotNet"
+    }
+  ]
+}

@@ -52,10 +52,34 @@ public class AdminRegisterControllerTest {
     public void whenPostWithRuntimeException_thenInCorrectResponse(final JsonObject request) throws Exception {
         doThrow(new RuntimeException()).when(service).persistUnregisterVehicles(any());
         String requestString = request.getJsonArray("InputRequestData").toString();
-        mockMvc.perform(MockMvcRequestBuilders.post("/admin/v1/vehicles/penalty")
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/v1/vehicles/monitor")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestString))
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError());
     }
+
+    @ParameterizedTest
+    @JsonFileSource(resources = {"/json/Street_Input_Request.json"})
+    public void whenPostWithValidRequestForStreet_thenCorrectResponse(final JsonObject request) throws Exception {
+        doReturn(Collections.singletonList("Oracle")).when(service).addStreets(any());
+        String requestString = request.getJsonArray("InputRequestData").toString();
+        final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/admin/v1/streets/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestString));
+        resultActions.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+
+    }
+
+    @ParameterizedTest
+    @JsonFileSource(resources = {"/json/Street_Input_Request.json"})
+    public void whenPostForStreetWithRuntimeException_thenInCorrectResponse(final JsonObject request) throws Exception {
+        doThrow(new RuntimeException()).when(service).addStreets(any());
+        String requestString = request.getJsonArray("InputRequestData").toString();
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/v1/streets/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestString))
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError());
+    }
+
 
 }

@@ -7,20 +7,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ParkingRequest {
+public class StreetRequest {
 
-    @NotNullConstraint
-    private String licensePlateNumber;
+    @NotNull
+    private BigDecimal price;
 
     @NotNullConstraint
     private String streetName;
 
-    @NotNull(message = "Check-in time should not be empty or null")
-    private LocalDateTime checkInDateTime;
 }

@@ -9,6 +9,7 @@ import com.parking.nl.domain.response.ParkingMonitoringResponse;
 import com.parking.nl.domain.response.Status;
 import com.parking.nl.exception.BusinessException;
 import com.parking.nl.exception.InvalidInputException;
+import com.parking.nl.exception.ServiceException;
 import com.parking.nl.mapper.ParkingVehiclesMapper;
 import com.parking.nl.service.ParkingSystemService;
 import com.parking.nl.service.tariff.TariffCalculator;
@@ -60,7 +61,7 @@ public class ParkingSystemServiceImpl implements ParkingSystemService {
         Specification<ParkingVehicle> spec = Specification.where(findVehicleByLicensePlateNumber(registerParkingRequest.getLicensePlateNumber())).and(findVehicleByStatus(ParkingStatus.START.getParkingStatus()));
         if(!parkingRepository.findAll(spec).isEmpty()){
             log.error("Vehicle already have active session");
-            throw new BusinessException("Unable to create new session for the vehicle with active session");
+            throw new ServiceException("Unable to create new session for the vehicle with active session");
         }
         parkingRepository.save(parkingMapper.translate(registerParkingRequest));
     }
@@ -72,7 +73,7 @@ public class ParkingSystemServiceImpl implements ParkingSystemService {
         Specification<ParkingVehicle> spec = Specification.where(findVehicleByLicensePlateNumber(licensePlateNumber)).and(findVehicleByStatus(ParkingStatus.START.getParkingStatus()));
         if(parkingRepository.findAll(spec).isEmpty()){
             log.error("Vehicle has no active session in the parking");
-            throw new InvalidInputException("No active parking session for vehicle:"+licensePlateNumber);
+            throw new ServiceException("No active parking session for vehicle:"+licensePlateNumber);
         }else{
             ParkingVehicle parkingVehicle = parkingRepository.findAll(spec).get(0);
             LocalDateTime endTime = LocalDateTime.now();

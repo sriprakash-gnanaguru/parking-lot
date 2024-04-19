@@ -1,9 +1,13 @@
 package com.parking.nl.service.impl;
 
 import com.parking.nl.data.model.UnRegsiteredVehicles;
+import com.parking.nl.data.repository.StreetRepository;
 import com.parking.nl.data.repository.UnRegisteredVehiclesRepository;
+import com.parking.nl.domain.request.StreetRequest;
 import com.parking.nl.domain.request.UnregisteredVehiclesRequest;
+import com.parking.nl.exception.ServiceException;
 import com.parking.nl.helper.PenaltyHelper;
+import com.parking.nl.mapper.StreetMapper;
 import com.parking.nl.mapper.UnRegisteredVehiclesMapper;
 import com.parking.nl.service.AdminRegisterService;
 import com.parking.nl.service.tariff.TariffCalculator;
@@ -25,21 +29,25 @@ import static com.parking.nl.common.Constants.*;
 @Slf4j
 public class AdminRegisterServiceImpl implements AdminRegisterService {
     UnRegisteredVehiclesRepository unRegisteredVehiclesRepository;
+    StreetRepository streetRepository;
     UnRegisteredVehiclesMapper vehiclesMapper;
+    StreetMapper streetMapper;
     StreetValidator streetValidator;
-
     CheckInDateValidator checkInDateValidator;
     PenaltyHelper helper;
     TariffCalculator tariffCalculator;
 
     @Autowired
-    public AdminRegisterServiceImpl(UnRegisteredVehiclesRepository unRegisteredVehiclesRepository,StreetValidator streetValidator,PenaltyHelper helper,TariffCalculator tariffCalculator,CheckInDateValidator checkInDateValidator){
+    public AdminRegisterServiceImpl(UnRegisteredVehiclesRepository unRegisteredVehiclesRepository,StreetValidator streetValidator,PenaltyHelper helper,TariffCalculator tariffCalculator,CheckInDateValidator checkInDateValidator,StreetRepository streetRepository){
         this.unRegisteredVehiclesRepository = unRegisteredVehiclesRepository;
         this.vehiclesMapper =  Mappers.getMapper(UnRegisteredVehiclesMapper.class);
-        this.streetValidator = streetValidator;
+        this.streetMapper =Mappers.getMapper(StreetMapper.class);;
         this.helper = helper;
+        this.streetValidator = streetValidator;
         this.tariffCalculator = tariffCalculator;
         this.checkInDateValidator = checkInDateValidator;
+        this.streetRepository = streetRepository;
+
 
     }
     @Override
@@ -56,6 +64,21 @@ public class AdminRegisterServiceImpl implements AdminRegisterService {
             output.add(SPACE +unRegsiteredVehicle.getLicensePlateNumber()+COLON+EURO+penality);
         });
         log.info("Unregistered Vehicles are persisted successfully in the system");
+        return output;
+    }
+
+    @Override
+    public  List<String>  addStreets(List<StreetRequest> streetRequests) {
+        List<String> output = new ArrayList<>();
+        streetRequests.forEach(streetRequest -> {
+            if(streetRepository.findByNameIgnoreCase(streetRequest.getStreetName()).isEmpty()){
+                streetRepository.save(streetMapper.translate(streetRequest));
+                output.add(streetRequest.getStreetName());
+            }else{
+                throw new ServiceException("Street already present in the streets:"+streetRequest.getStreetName());
+            }
+        });
+        log.info("Streets are persisted successfully in the system");
         return output;
     }
 

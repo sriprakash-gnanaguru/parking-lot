@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class TariffServiceImpl implements TariffService {
 
     @PostConstruct
     @Cacheable("tariffMetaData")
-    public Map<String, Integer> loadTariffMetaData() {
+    public Map<String, BigDecimal> loadTariffMetaData() {
         List<Street> parkingTariffMetaDataList = streetRepository.findAll();
         return parkingTariffMetaDataList.stream().collect(Collectors.toMap(Street::getName, Street::getPricePerMinute));
     }
