@@ -27,14 +27,13 @@ public class StreetValidatorTest {
     @DisplayName("Validate the street name in the system")
     public void testValidate(){
         when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java" , BigDecimal.ONE));
-        streetValidator.validate("Java");
-        verify(tariffService, times(1)).loadTariffMetaData();
+        Assertions.assertDoesNotThrow(() ->streetValidator.validate("Java"));
     }
 
     @Test
     @DisplayName("Validate the street name in the system with exception")
     public void testValidateThenException(){
-        when(tariffService.loadTariffMetaData()).thenThrow(new InvalidInputException("Street name is not found in the street"));
+        when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Azure" , BigDecimal.ONE));
         Assertions.assertThrows(InvalidInputException.class, () -> streetValidator.validate("Java"));
     }
 
@@ -49,8 +48,8 @@ public class StreetValidatorTest {
     @Test
     @DisplayName("Validate the street name in the system with exception")
     public void testValidatewithListParamThenException(){
-        when(tariffService.loadTariffMetaData()).thenThrow(new InvalidInputException("Street name is not found in the street"));
-        Assertions.assertThrows(InvalidInputException.class, () -> streetValidator.validate(Collections.singletonList(UnregisteredVehiclesRequest.builder().build())));
+        when(tariffService.loadTariffMetaData()).thenReturn(Collections.singletonMap("Java" ,BigDecimal.ONE));
+        Assertions.assertThrows(InvalidInputException.class, () -> streetValidator.validate(Collections.singletonList(UnregisteredVehiclesRequest.builder().streetName("Azure").build())));
     }
 
 }

@@ -96,4 +96,15 @@ public class ParkingSystemServiceTest {
         Assertions.assertThrows(ServiceException.class,()->service.unregisterParking(licensePlateNumber));
     }
 
+    @Test
+    @DisplayName("Positive Scenario to find the vehicle by license plate number with active status")
+    public void testFindLicensePlateNumberByStatus(){
+        ParkingVehicle vehicle = ParkingVehicle.builder().licensePlateNumber("NL-HJ-987").streetName("Java").status(ParkingStatus.START.getParkingStatus()).startTime(LocalDateTime.now()).build();
+        Specification<ParkingVehicle> spec = Specification.where(findVehicleByStatus(ParkingStatus.START.getParkingStatus()));
+        Mockito.when(parkingRepository.findAll(spec)).thenReturn(Collections.singletonList(vehicle));
+        Assertions.assertDoesNotThrow(()->service.findLicensePlateNumberByStatus("NL-HJ-987"));
+
+    }
+
+
 }

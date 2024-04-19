@@ -78,6 +78,10 @@ public class AdminRegisterController {
     public ResponseEntity<ParkingMonitoringResponse> AddStreets(@RequestBody @Valid List<StreetRequest> streetRequests) {
         log.info("Adding Streets in the system with price tariff");
         List<String> output = adminRegisterService.addStreets(streetRequests);
+        if(output == null || output.isEmpty()){
+            log.error("Unable to add the streets in the system.");
+            throw new BusinessException("Unable to add the streets in the system");
+        }
         StringBuilder builder = new StringBuilder();
         builder.append(ADMIN_CONTROLLER_STREET_MSG);
         builder.append(output.toString().replace(OPEN_BRACKET,EMPTY).replace(CLOSE_BRACKET,EMPTY));
